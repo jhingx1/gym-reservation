@@ -1,7 +1,7 @@
 package com.mitocode.reservation.adapter.in.rest.reservation;
 
-import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.OK;
 
 import com.mitocode.reservation.model.reservation.Reservation;
 import io.restassured.path.json.JsonPath;
@@ -14,7 +14,7 @@ public final class ReservationControllerAssertions {
     private ReservationControllerAssertions() {}
 
     public static void assertThatResponseIsReservation(Response response, Reservation reservation) {
-        assertThat(response.statusCode()).isEqualTo(OK.getStatusCode());
+        assertThat(response.statusCode()).isEqualTo(OK.value());
 
         JsonPath json = response.jsonPath();
 
@@ -29,7 +29,7 @@ public final class ReservationControllerAssertions {
     }
 
     public static void assertThatResponseContainsReservations(Response response, List<Reservation> expectedReservations) {
-        assertThat(response.statusCode()).isEqualTo(OK.getStatusCode());
+        assertThat(response.statusCode()).isEqualTo(OK.value());
 
         JsonPath json = response.jsonPath();
         assertThat(json.getList("$").size()).isEqualTo(expectedReservations.size());

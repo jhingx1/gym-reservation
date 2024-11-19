@@ -1,7 +1,7 @@
 package com.mitocode.reservation.adapter.in.rest.common;
 
 import com.mitocode.reservation.model.customer.CustomerId;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.HttpStatus;
 
 import static com.mitocode.reservation.adapter.in.rest.common.ControllerCommons.clientErrorException;
 
@@ -10,13 +10,14 @@ public class CustomerIdParser {
 
     public static CustomerId parseCustomerId(String string) {
         if (string == null || string.isBlank()) {
-            throw clientErrorException(Response.Status.BAD_REQUEST, "Missing 'email'");
+            throw clientErrorException(HttpStatus.BAD_REQUEST, "Missing 'email'");
         }
 
         try {
             return new CustomerId(string);
         } catch (IllegalArgumentException e) {
-            throw clientErrorException(Response.Status.BAD_REQUEST, "Invalid 'email'");
+            throw clientErrorException(HttpStatus.BAD_REQUEST, "Invalid 'email'");
         }
     }
 }
+

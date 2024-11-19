@@ -4,6 +4,8 @@ import com.mitocode.reservation.adapter.out.persistence.DemoGymClasses;
 import com.mitocode.reservation.application.port.out.persistence.GymClassRepository;
 import com.mitocode.reservation.model.gymclass.GymClass;
 import com.mitocode.reservation.model.gymclass.ClassId;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Locale;
@@ -12,6 +14,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+@ConditionalOnProperty(name = "persistence", havingValue = "inmemory", matchIfMissing = true)
+@Repository
 public class InMemoryGymClassRepository implements GymClassRepository {
 
     private final Map<ClassId, GymClass> gymClasses = new ConcurrentHashMap<>();

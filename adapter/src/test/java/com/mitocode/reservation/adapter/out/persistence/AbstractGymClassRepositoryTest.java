@@ -7,19 +7,13 @@ import com.mitocode.reservation.model.gymclass.GymClass;
 import com.mitocode.reservation.model.gymclass.ClassId;
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractGymClassRepositoryTest<T extends GymClassRepository> {
+public abstract class AbstractGymClassRepositoryTest {
 
-    private T gymClassRepository;
-
-    @BeforeEach
-    void initRepository() {
-        gymClassRepository = createGymClassRepository();
-    }
-
-    protected abstract T createGymClassRepository();
+    @Autowired
+    GymClassRepository gymClassRepository;
 
     @Test
     void givenTestGymClassesAndATestClassId_findById_returnsATestGymClass() {
