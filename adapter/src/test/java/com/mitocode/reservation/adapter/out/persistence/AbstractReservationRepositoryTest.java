@@ -14,25 +14,22 @@ import com.mitocode.reservation.model.gymclass.GymClass;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractReservationRepositoryTest<T extends ReservationRepository, U extends GymClassRepository> {
+public abstract class AbstractReservationRepositoryTest {
 
     private static final GymClass TEST_GYM_CLASS_1 = createTestClass(10, 10);
     private static final GymClass TEST_GYM_CLASS_2 = createTestClass(5, 5);
 
-    private T reservationRepository;
-    private U gymClassRepository;
+    @Autowired
+    GymClassRepository gymClassRepository;
+    @Autowired
+    ReservationRepository reservationRepository;
 
     @BeforeEach
     void initRepositories() {
-        reservationRepository = createReservationRepository();
-        gymClassRepository = createGymClassRepository();
         persistTestGymClasses();
     }
-
-    protected abstract T createReservationRepository();
-
-    protected abstract U createGymClassRepository();
 
     private void persistTestGymClasses() {
         gymClassRepository.save(TEST_GYM_CLASS_1);

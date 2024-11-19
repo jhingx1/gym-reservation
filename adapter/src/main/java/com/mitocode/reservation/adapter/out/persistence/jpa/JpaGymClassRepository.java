@@ -4,56 +4,46 @@ import com.mitocode.reservation.adapter.out.persistence.DemoGymClasses;
 import com.mitocode.reservation.application.port.out.persistence.GymClassRepository;
 import com.mitocode.reservation.model.gymclass.GymClass;
 import com.mitocode.reservation.model.gymclass.ClassId;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@ConditionalOnProperty(name = "persistence", havingValue = "mysql")
+@Repository
+@RequiredArgsConstructor
 public class JpaGymClassRepository implements GymClassRepository {
 
-    private final EntityManagerFactory entityManagerFactory;
+    private final JpaGymClassSpringDataRepository springDataRepository;
 
-    public JpaGymClassRepository(EntityManagerFactory entityManagerFactory){
-        this.entityManagerFactory = entityManagerFactory;
-        createDemoGymClasses();
-    }
-
+    @PostConstruct
     private void createDemoGymClasses(){
         DemoGymClasses.DEMO_GYM_CLASSES.forEach(this::save);
     }
 
     @Override
+    @Transactional
     public void save(GymClass gymClass){
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            entityManager.getTransaction().begin();
-            entityManager.merge(GymClassMapper.toJpaEntity(gymClass));
-            entityManager.getTransaction().commit();
-        }
+        springDataRepository.save(GymClassMapper.toJpaEntity(gymClass));
     }
 
     @Override
+    @Transactional
     public Optional<GymClass> findById(ClassId classId){
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            GymClassJpaEntity gymClassJpaEntity = entityManager.find(GymClassJpaEntity.class, classId.value());
-            return GymClassMapper.toModelEntityOptional(gymClassJpaEntity);
-        }
+        return springDataRepository.findById(classId.value())
+                .flatMap(gymClassJpaEntity -> GymClassMapper.toModelEntityOptional(gymClassJpaEntity));
     }
 
     @Override
+    @Transactional
     public List<GymClass> findByTypeOrDescription(String queryString){
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            TypedQuery<GymClassJpaEntity> query =
-                    entityManager.createQuery(
-                                    "from GymClassJpaEntity where type like :query or description like :query",
-                                    GymClassJpaEntity.class
-                            )
-                            .setParameter("query", "%" + queryString + "%");
-
-            List<GymClassJpaEntity> entities = query.getResultList();
-            return GymClassMapper.toModelEntities(entities);
-        }
+        List<GymClassJpaEntity> entities =
+                springDataRepository.findByTypeOrDescriptionLike("%" + queryString + "%");
+        return GymClassMapper.toModelEntities(entities);
     }
 
 }

@@ -1,17 +1,10 @@
 package com.mitocode.reservation.adapter.out.persistence.inmemory;
 
 import com.mitocode.reservation.adapter.out.persistence.AbstractReservationRepositoryTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-class InMemoryReservationRepositoryTest
-        extends AbstractReservationRepositoryTest<InMemoryReservationRepository, InMemoryGymClassRepository> {
-
-    @Override
-    protected InMemoryReservationRepository createReservationRepository() {
-        return new InMemoryReservationRepository();
-    }
-
-    @Override
-    protected InMemoryGymClassRepository createGymClassRepository() {
-        return new InMemoryGymClassRepository();
-    }
+@SpringBootTest
+@ActiveProfiles("test")
+class InMemoryReservationRepositoryTest extends AbstractReservationRepositoryTest {
 }

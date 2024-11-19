@@ -4,90 +4,53 @@ import com.mitocode.reservation.application.port.out.persistence.ReservationRepo
 import com.mitocode.reservation.model.customer.CustomerId;
 import com.mitocode.reservation.model.gymclass.ClassId;
 import com.mitocode.reservation.model.reservation.Reservation;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@ConditionalOnProperty(name = "persistence", havingValue = "mysql")
+@Repository
+@RequiredArgsConstructor
 public class JpaReservationRepository implements ReservationRepository {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    public JpaReservationRepository(EntityManagerFactory entityManagerFactory){
-        this.entityManagerFactory = entityManagerFactory;
-    }
+    private final JpaReservationSpringDataRepository springDataRepository;
 
     @Override
+    @Transactional
     public void save(Reservation reservation){
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            entityManager.getTransaction().begin();
-            entityManager.merge(ReservationMapper.toJpaEntity(reservation));
-            entityManager.getTransaction().commit();
-        }
+        springDataRepository.save(ReservationMapper.toJpaEntity(reservation));
     }
 
     @Override
+    @Transactional
     public void deleteByCustomerId(CustomerId customerId){
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            entityManager.getTransaction().begin();
-            TypedQuery<ReservationJpaEntity> query = entityManager.createQuery(
-                    "FROM ReservationJpaEntity r WHERE r.customerId = :customerId", ReservationJpaEntity.class);
-            query.setParameter("customerId", customerId.email());
-            List<ReservationJpaEntity> reservationJpaEntities = query.getResultList();
-
-            for (ReservationJpaEntity reservationJpaEntity : reservationJpaEntities) {
-                entityManager.remove(reservationJpaEntity);
-            }
-            entityManager.getTransaction().commit();
-        }
+        springDataRepository.findByCustomerId(customerId.email())
+                .forEach(reservation -> springDataRepository.deleteById(reservation.getId()));
     }
 
     @Override
+    @Transactional
     public void deleteReservationByCustomerIdAndClassId(CustomerId customerId, ClassId classId){
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            entityManager.getTransaction().begin();
-            TypedQuery<ReservationJpaEntity> query = entityManager.createQuery(
-                    "FROM ReservationJpaEntity r WHERE r.customerId = :customerId AND r.gymClass.id = :classId",
-                    ReservationJpaEntity.class);
-            query.setParameter("customerId", customerId.email());
-            query.setParameter("classId", classId.value());
-
-            query.getResultStream()
-                    .findFirst()
-                    .ifPresent(entityManager::remove);
-
-            entityManager.getTransaction().commit();
-        }
+        springDataRepository.findByCustomerIdAndClassId(customerId.email(), classId.value())
+                .ifPresent(reservation -> springDataRepository.deleteById(reservation.getId()));
     }
 
     @Override
+    @Transactional
     public List<Reservation> findReservationsByCustomerId(CustomerId customerId){
-        try(EntityManager entityManager = entityManagerFactory.createEntityManager()){
-            TypedQuery<ReservationJpaEntity> query = entityManager.createQuery(
-                    "FROM ReservationJpaEntity r WHERE r.customerId = :customerId", ReservationJpaEntity.class);
-            query.setParameter("customerId", customerId.email());
-            List<ReservationJpaEntity> reservationJpaEntities = query.getResultList();
-
-            return ReservationMapper.toModelEntities(reservationJpaEntities);
-        }
+        return ReservationMapper.toModelEntities(
+                springDataRepository.findByCustomerId(customerId.email())
+        );
     }
 
     @Override
+    @Transactional
     public Optional<Reservation> findByCustomerIdAndClassId(CustomerId customerId, ClassId classId) {
-        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
-            TypedQuery<ReservationJpaEntity> query = entityManager.createQuery(
-                    "FROM ReservationJpaEntity r WHERE r.customerId = :customerId AND r.gymClass.id = :classId",
-                    ReservationJpaEntity.class);
-            query.setParameter("customerId", customerId.email());
-            query.setParameter("classId", classId.value());
-
-            ReservationJpaEntity reservationEntity = query.getResultStream().findFirst().orElse(null);
-
-            return reservationEntity != null
-                    ? ReservationMapper.toModelEntityOptional(reservationEntity)
-                    : Optional.empty();
-        }
+        return springDataRepository.findByCustomerIdAndClassId(customerId.email(), classId.value())
+                .flatMap(reservationJpaEntity -> ReservationMapper.toModelEntityOptional(reservationJpaEntity));
     }
 }

@@ -4,12 +4,16 @@ import com.mitocode.reservation.application.port.out.persistence.ReservationRepo
 import com.mitocode.reservation.model.customer.CustomerId;
 import com.mitocode.reservation.model.gymclass.ClassId;
 import com.mitocode.reservation.model.reservation.Reservation;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ConditionalOnProperty(name = "persistence", havingValue = "inmemory", matchIfMissing = true)
+@Repository
 public class InMemoryReservationRepository implements ReservationRepository {
 
     private final Map<CustomerId, List<Reservation>> reservationMap = new ConcurrentHashMap<>();

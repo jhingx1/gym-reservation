@@ -2,11 +2,11 @@ package com.mitocode.reservation.adapter.out.persistence.inmemory;
 
 import com.mitocode.reservation.adapter.out.persistence.AbstractGymClassRepositoryTest;
 
-class InMemoryGymClassRepositoryTest
-        extends AbstractGymClassRepositoryTest<InMemoryGymClassRepository> {
+import com.mitocode.reservation.adapter.out.persistence.AbstractGymClassRepositoryTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-    @Override
-    protected InMemoryGymClassRepository createGymClassRepository() {
-        return new InMemoryGymClassRepository();
-    }
+@SpringBootTest
+@ActiveProfiles("test")
+class InMemoryGymClassRepositoryTest extends AbstractGymClassRepositoryTest {
 }

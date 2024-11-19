@@ -1,58 +1,34 @@
 package com.mitocode.reservation.adapter.in.rest.gymclass;
 
-import static com.mitocode.reservation.adapter.in.rest.HttpTestCommons.TEST_PORT;
 import static com.mitocode.reservation.adapter.in.rest.HttpTestCommons.assertThatResponseIsError;
 import static com.mitocode.reservation.adapter.in.rest.gymclass.GymClassControllerAssertions.assertThatResponseIsGymClassList;
 import static com.mitocode.reservation.model.gymclass.TestGymClassFactory.createTestClass;
 import static io.restassured.RestAssured.given;
-import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.mitocode.reservation.application.port.in.gymclass.FindGymClassUseCase;
 import com.mitocode.reservation.model.gymclass.GymClass;
 import io.restassured.response.Response;
-import jakarta.ws.rs.core.Application;
 import java.util.List;
-import java.util.Set;
-import org.jboss.resteasy.plugins.server.undertow.UndertowJaxrsServer;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class GymClassControllerTest {
 
     private static final GymClass TEST_GYM_CLASS_1 = createTestClass(30, 20);
     private static final GymClass TEST_GYM_CLASS_2 = createTestClass(25, 10);
 
-    private static final FindGymClassUseCase findGymClassUseCase = mock(FindGymClassUseCase.class);
+    @LocalServerPort
+    private Integer TEST_PORT;
 
-    private static UndertowJaxrsServer server;
-
-    @BeforeAll
-    static void init() {
-        server = new UndertowJaxrsServer()
-                .setPort(TEST_PORT)
-                .start()
-                .deploy(new Application() {
-                    @Override
-                    public Set<Object> getSingletons() {
-                        return Set.of(new FindGymClassesController(findGymClassUseCase));
-                    }
-                });
-    }
-
-    @AfterAll
-    static void stop() {
-        server.stop();
-    }
-
-    @BeforeEach
-    void resetMocks() {
-        Mockito.reset(findGymClassUseCase);
-    }
+    @MockBean
+    FindGymClassUseCase findGymClassUseCase;
 
     @Test
     void givenAQueryAndAListOfGymClasses_findGymClasses_requestsGymClassesViaQueryAndReturnsThem() {
