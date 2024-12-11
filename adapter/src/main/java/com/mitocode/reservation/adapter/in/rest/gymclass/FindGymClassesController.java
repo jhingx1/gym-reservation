@@ -4,6 +4,7 @@ import com.mitocode.reservation.application.port.in.gymclass.FindGymClassUseCase
 import com.mitocode.reservation.model.gymclass.GymClass;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ public class FindGymClassesController {
 
     private final FindGymClassUseCase findGymClassUseCase;
 
+    @PreAuthorize("hasRole('ROLE_spring-keycloak-client_view-gymclass')")
     @GetMapping
     public List<GymClassInListWebModel> findGymClasses(
             @RequestParam(value = "query", required = false) String query) {

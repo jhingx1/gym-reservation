@@ -3,6 +3,7 @@ package com.mitocode.reservation.adapter.in.rest.reservation;
 import com.mitocode.reservation.application.port.in.reservation.GetUserReservationsUseCase;
 import com.mitocode.reservation.model.customer.CustomerId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class GetReservationsController {
 
     private final GetUserReservationsUseCase getUserReservationsUseCase;
 
+    @PreAuthorize("hasRole('ROLE_spring-keycloak-client_view-reservation')")
     @GetMapping("/{customerId}")
     public List<ReservationWebModel> getUserReservations(@PathVariable("customerId") String customerIdString) {
         CustomerId customerId = parseCustomerId(customerIdString);
