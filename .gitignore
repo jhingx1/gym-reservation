@@ -1,0 +1,50 @@
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs y datos temporales
+*.log
+logs/
+*.tmp
+
+# Archivos de compilación
+target/
+*.class
+
+# Configuración específica de IntelliJ IDEA
+.idea/
+*.iml
+out/
+*.ipr
+*.iws
+
+# Dependencias
+dependency-reduced-pom.xml
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Archivos específicos de Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# Archivos específicos de Gradle
+.gradle/
+build/
+
+# Entornos virtuales y credenciales
+*.env
+*.key
+*.pem
+
+# Archivos de cobertura
+coverage/
+*.lcov
+
+# Otros
+*.swp
+*.swo
+*.bak
+*.old

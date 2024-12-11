@@ -4,6 +4,7 @@ import static com.mitocode.reservation.adapter.in.rest.HttpTestCommons.assertTha
 import static io.restassured.RestAssured.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -21,6 +22,8 @@ import com.mitocode.reservation.model.reservation.ReservationNotFoundException;
 import io.restassured.response.Response;
 
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,6 +37,8 @@ class ReservationControllerTest {
     private static final CustomerId TEST_CUSTOMER_ID = new CustomerId("test@example.com");
     private static final GymClass TEST_GYM_CLASS_1 = TestGymClassFactory.createTestClass(20, 15);
 
+    private String token;
+
     @LocalServerPort
     private Integer TEST_PORT;
 
@@ -41,11 +46,32 @@ class ReservationControllerTest {
     @MockBean GetUserReservationsUseCase GET_USER_RESERVATIONS_USE_CASE;
     @MockBean CancelReservationUseCase CANCEL_RESERVATION_USE_CASE;
 
+    @BeforeEach
+    void loadToken(){
+        token = given()
+                .port(TEST_PORT)
+                .param("grant_type", "password")
+                .param("realm", "spring-keycloak-realm")
+                .param("client_id", "spring-keycloak-client")
+                .param("username", "user1")
+                .param("password", "user1")
+                .param("client_secret", "AIUzFCHTW9wIHzgpG8bQn1SrXm88fJ7O")
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .when()
+                .post("http://localhost:8383/realms/spring-keycloak-realm/protocol/openid-connect/token")
+                .then()
+                .extract()
+                .jsonPath()
+                .get("access_token");
+    }
+
     @Test
     void givenInvalidCustomerId_getReservations_returnsError() {
         String customerId = "invalid-email";
 
-        Response response = given().port(TEST_PORT)
+        Response response = given()
+                .port(TEST_PORT)
+                .header(AUTHORIZATION, "Bearer " + token)
                 .get("/reservations/" + customerId)
                 .then()
                 .extract()
@@ -69,6 +95,7 @@ class ReservationControllerTest {
 
         Response response = given()
                 .port(TEST_PORT)
+                .header(AUTHORIZATION, "Bearer " + token)
                 .get("/reservations/" + customerId.email())
                 .then()
                 .extract()
@@ -91,6 +118,7 @@ class ReservationControllerTest {
 
         Response response = given()
                 .port(TEST_PORT)
+                .header(AUTHORIZATION, "Bearer " + token)
                 .queryParam("classId", classId.value())
                 .queryParam("quantity", quantity)
                 .post("/reservations/" + customerId.email() + "/reservation")
@@ -110,7 +138,9 @@ class ReservationControllerTest {
         when(MAKE_RESERVATION_USE_CASE.makeReservation(customerId, classId, quantity))
                 .thenThrow(new GymClassNotFoundException());
 
-        Response response = given().port(TEST_PORT)
+        Response response = given()
+                .port(TEST_PORT)
+                .header(AUTHORIZATION, "Bearer " + token)
                 .queryParam("classId", classId.value())
                 .queryParam("quantity", quantity)
                 .post("/reservations/" + customerId.email() + "/reservation")
@@ -130,7 +160,9 @@ class ReservationControllerTest {
         when(MAKE_RESERVATION_USE_CASE.makeReservation(customerId, classId, quantity))
                 .thenThrow(new NotEnoughSpotsAvailableException("Not enough spots available", 10));
 
-        Response response = given().port(TEST_PORT)
+        Response response = given()
+                .port(TEST_PORT)
+                .header(AUTHORIZATION, "Bearer " + token)
                 .queryParam("classId", classId.value())
                 .queryParam("quantity", quantity)
                 .post("/reservations/" + customerId.email() + "/reservation")
@@ -147,6 +179,7 @@ class ReservationControllerTest {
         ClassId classId = TEST_GYM_CLASS_1.id();
 
         given().port(TEST_PORT)
+                .header(AUTHORIZATION, "Bearer " + token)
                 .delete("/reservations/" + customerId.email() + "/class/" + classId.value())
                 .then()
                 .statusCode(NO_CONTENT.value());

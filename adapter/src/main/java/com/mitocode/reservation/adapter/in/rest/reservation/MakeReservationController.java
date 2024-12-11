@@ -8,6 +8,7 @@ import com.mitocode.reservation.model.gymclass.ClassId;
 import com.mitocode.reservation.model.reservation.Reservation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static com.mitocode.reservation.adapter.in.rest.common.ClassIdParser.parseClassId;
@@ -21,6 +22,7 @@ public class MakeReservationController {
 
     private final MakeReservationUseCase makeReservationUseCase;
 
+    @PreAuthorize("hasRole('ROLE_spring-keycloak-client_make-reservation')")
     @PostMapping("/{customerId}/reservation")
     public ReservationWebModel addLineItem(
             @PathVariable("customerId") String customerIdString,
