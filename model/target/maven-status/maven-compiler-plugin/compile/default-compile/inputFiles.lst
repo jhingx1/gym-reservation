@@ -1,0 +1,7 @@
+D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\src\main\java\com\mitocode\reservation\model\reservation\ReservationNotFoundException.java
+D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\src\main\java\com\mitocode\reservation\model\gymclass\ClassId.java
+D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\src\main\java\com\mitocode\reservation\model\reservation\Reservation.java
+D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\src\main\java\com\mitocode\reservation\model\gymclass\GymClass.java
+D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\src\main\java\com\mitocode\reservation\model\customer\CustomerId.java
+D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\src\main\java\com\mitocode\reservation\model\reservation\NotEnoughSpotsAvailableException.java
+D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\src\main\java\com\mitocode\reservation\model\reservation\ReservationStatus.java

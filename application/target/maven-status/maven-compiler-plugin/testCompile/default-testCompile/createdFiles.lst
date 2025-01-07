@@ -1,0 +1,4 @@
+com\mitocode\reservation\application\service\gymclass\FindGymClassServiceTest.class
+com\mitocode\reservation\application\service\reservation\MakeReservationServiceTest.class
+com\mitocode\reservation\application\service\reservation\CancelReservationServiceTest.class
+com\mitocode\reservation\application\service\reservation\GetUserReservationsServiceTest.class

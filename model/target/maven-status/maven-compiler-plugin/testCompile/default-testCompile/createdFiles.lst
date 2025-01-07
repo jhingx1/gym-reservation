@@ -1,0 +1,4 @@
+com\mitocode\reservation\model\reservation\ReservationTest.class
+com\mitocode\reservation\model\customer\CustomerIdTest.class
+com\mitocode\reservation\model\customer\TestCustomerIdFactory.class
+com\mitocode\reservation\model\gymclass\TestGymClassFactory.class

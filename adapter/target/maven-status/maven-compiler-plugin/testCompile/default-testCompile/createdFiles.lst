@@ -1,0 +1,9 @@
+com\mitocode\reservation\adapter\out\persistence\inmemory\InMemoryGymClassRepositoryTest.class
+com\mitocode\reservation\adapter\in\rest\reservation\ReservationControllerTest.class
+com\mitocode\reservation\adapter\in\rest\HttpTestCommons.class
+com\mitocode\reservation\adapter\out\persistence\AbstractReservationRepositoryTest.class
+com\mitocode\reservation\adapter\in\rest\gymclass\GymClassControllerTest.class
+com\mitocode\reservation\adapter\in\rest\reservation\ReservationControllerAssertions.class
+com\mitocode\reservation\adapter\in\rest\gymclass\GymClassControllerAssertions.class
+com\mitocode\reservation\adapter\out\persistence\AbstractGymClassRepositoryTest.class
+com\mitocode\reservation\adapter\out\persistence\inmemory\InMemoryReservationRepositoryTest.class

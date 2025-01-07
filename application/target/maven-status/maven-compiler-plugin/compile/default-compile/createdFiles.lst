@@ -1,0 +1,11 @@
+com\mitocode\reservation\application\port\in\reservation\GymClassNotFoundException.class
+com\mitocode\reservation\application\port\out\persistence\ReservationRepository.class
+com\mitocode\reservation\application\service\gymclass\FindGymClassService.class
+com\mitocode\reservation\application\port\in\reservation\CancelReservationUseCase.class
+com\mitocode\reservation\application\service\reservation\CancelReservationService.class
+com\mitocode\reservation\application\port\in\gymclass\FindGymClassUseCase.class
+com\mitocode\reservation\application\port\in\reservation\GetUserReservationsUseCase.class
+com\mitocode\reservation\application\port\in\reservation\MakeReservationUseCase.class
+com\mitocode\reservation\application\service\reservation\GetUserReservationsService.class
+com\mitocode\reservation\application\port\out\persistence\GymClassRepository.class
+com\mitocode\reservation\application\service\reservation\MakeReservationService.class

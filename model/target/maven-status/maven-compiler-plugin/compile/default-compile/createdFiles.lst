@@ -1,0 +1,7 @@
+com\mitocode\reservation\model\reservation\NotEnoughSpotsAvailableException.class
+com\mitocode\reservation\model\reservation\ReservationStatus.class
+com\mitocode\reservation\model\gymclass\ClassId.class
+com\mitocode\reservation\model\reservation\Reservation.class
+com\mitocode\reservation\model\reservation\ReservationNotFoundException.class
+com\mitocode\reservation\model\gymclass\GymClass.class
+com\mitocode\reservation\model\customer\CustomerId.class

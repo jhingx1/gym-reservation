@@ -1,0 +1,5 @@
+# Created at 2024-12-14T08:08:50.452
+Boot Manifest-JAR contains absolute paths in classpath 'D:\MitoCode\Arquitectura_Hexagonal\repo_gym\hexagonal-architecture-java-2\model\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+
